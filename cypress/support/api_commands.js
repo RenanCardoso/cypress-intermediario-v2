@@ -60,6 +60,7 @@ Cypress.Commands.add('apiCreateLabel', label => {
         url: `/api/v4/projects/${response.body.id}/labels`,
         body: {
           name: label.name,
+          description: label.description,
           color: label.color
         },
         headers: { Authorization: accessToken },
@@ -74,8 +75,10 @@ Cypress.Commands.add('apiCreateMilestone', milestone => {
         method: 'POST',
         url: `/api/v4/projects/${response.body.id}/milestones`,
         body: {
-          name: milestone.name,
-          color: milestone.color
+          title: milestone.title,
+          description: milestone.description,
+          start_date: milestone.start_date,
+          due_date: milestone.due_date,
         },
         headers: { Authorization: accessToken },
       })

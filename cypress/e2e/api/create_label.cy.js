@@ -6,7 +6,7 @@ describe("Criar label via API", () => {
   it("criar com sucesso", () => {
     const label = {
       name: `label-${faker.datatype.uuid()}`,
-      color: faker.color.rgb(),
+      color: faker.color.rgb({ casing: 'upper' }),
       project: {
         name: `project-${faker.datatype.uuid()}`,
         description: faker.random.words(5),

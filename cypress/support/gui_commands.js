@@ -1,40 +1,35 @@
 Cypress.Commands.add(
     "guiLogin",
     (
-      user = Cypress.env("user_name"),
-      password = Cypress.env("user_password"),
-      { cacheSession = false } = {}
+      user = Cypress.env('user_name'),
+      password = Cypress.env('user_password'),
+      { cacheSession = true } = {},
     ) => {
       const login = () => {
-        cy.visit("/users/sign_in");
-  
-        cy.get("[data-qa-selector='login_field']").type(user);
-        cy.get("[data-qa-selector='password_field']").type(password, {
-          log: false,
-        });
-        cy.get("[data-qa-selector='sign_in_button']").click();
-      };
-  
-      const validate = () => {
-        cy.visit("/");
-        cy.location("pathname", { timeout: 1000 }).should(
-          "not.eq",
-          "/users/sign_in"
-        );
-      };
-  
-      const options = {
-        cacheAcrossSpecs: true, // compartilhar a sessão entre specs
-        validate,               // verificar se a sessão ainda é válida
-      };
-  
-      if (cacheSession) {
-        cy.session(user, login, options);
-      } else {
-        login();
+        cy.visit('/users/sign_in')
+    
+        cy.get("[data-qa-selector='login_field']").type(user)
+        cy.get("[data-qa-selector='password_field']").type(password, { log: false })
+        cy.get("[data-qa-selector='sign_in_button']").click()
       }
-    }
-  );
+    
+      const validate = () => {
+        cy.visit('/')
+        cy.location('pathname', { timeout: 1000 })
+          .should('not.eq', '/users/sign_in')
+      }
+    
+      const options = {
+        cacheAcrossSpecs: true,
+        validate,
+      }
+    
+      if (cacheSession) {
+        cy.session(user, login, options)
+      } else {
+        login()
+      }
+    })
   
   Cypress.Commands.add('guiLogout', () => {
       cy.get('[data-qa-selector="user_menu"]').click();
@@ -64,9 +59,20 @@ Cypress.Commands.add(
     cy.visit(`/${Cypress.env("user_name")}/${label.project.name}/-/labels/new`);
   
     cy.get("#label_title").type(label.name);
-    cy.get("#label_description").type(label.color);
+    cy.get("#label_description").type(label.description);
+    cy.get("#label_color").clear().type(label.color);
 
     cy.contains("Create label").click();
   });
   
+  Cypress.Commands.add("guiCreateMilestone", (milestone) => {
+    cy.visit(`/${Cypress.env("user_name")}/${milestone.project.name}/-/milestones/new`);
+  
+    cy.get("#milestone_title").type(milestone.title);
+    cy.get(".qa-milestone-description").type(milestone.description);
+    cy.get("#milestone_start_date").type(milestone.start_date).blur();
+    cy.get("#milestone_due_date").type(milestone.due_date).blur();
+
+    cy.contains("Create milestone").click();
+  });
   

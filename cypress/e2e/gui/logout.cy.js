@@ -1,6 +1,7 @@
 describe("Logout", () => {
   beforeEach(() => {
     cy.guiLogin();
+    cy.visit('/');
   });
   it("realizar logout com sucesso", () => {
     cy.guiLogout();
